@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive To Do List</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background-color: grey;
+margin: 0;
+padding: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 100vh;
+}
+
+#todo-container {
+width: 80%;
+max-width: 400px;
+background-color: white;
+overflow: hidden;
+}
+
+#clock {
+text-align: center;
+padding: 10px;
+background-color: brown;
+color: white;
+}
+
+#tasks {
+padding: 20px;
+}
+
+.task {
+display: flex;
+justify-content: space-between;
+align-items: center;
+border-bottom: 1px solid grey;
+padding: 10px;
+}
+
+.task input[type="checkbox"] {
+margin-right: 10px;
+}
+
+#add-task {
+display: flex;
+padding: 10px;
+background-color: brown;
+color: white;
+}
+
+#add-task input {
+flex-grow: 1;
+margin-right: 10px;
+}
+
+#add-task button {
+background-color: black;
+color: white;
+padding: 8px;
+cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div id="todo-container">
+<div id="clock"></div>
+<div id="tasks"></div>
+<div id="add-task">
+<input type="text" id="task-input" placeholder="Enter new task">
+<button onclick="addTask()">Add Task</button>
+</div>
+</div>
+
+<script>
+// Real-time clock
+function updateClock()
+{
+const now = new Date();
+const formattedTime = now.toLocaleTimeString();
+const formattedDate = now.toLocaleDateString();
+document.getElementById('clock').innerHTML = `${formattedDate} ${formattedTime}`;
+}
+
+// Add task function
+function addTask() {
+const taskInput = document.getElementById('task-input');
+const taskText = taskInput.value.trim();
+
+if (taskText !== '') {
+const tasksContainer = document.getElementById('tasks');
+const taskItem = document.createElement('div');
+taskItem.className = 'task';
+taskItem.innerHTML = `
+<input type="checkbox" onchange="markAsCompleted(this)">
+<span>${taskText}</span>
+<button onclick="deleteTask(this)">Delete</button>
+`;
+tasksContainer.appendChild(taskItem);
+
+// Clear input field
+taskInput.value = '';
+}
+}
+
+// Mark task as completed
+function markAsCompleted(checkbox) {
+const taskText = checkbox.nextElementSibling;
+taskText.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+}
+
+// Delete task function
+function deleteTask(button) {
+const taskItem = button.parentElement;
+taskItem.remove();
+}
+
+// Update clock every second
+setInterval(updateClock, 1000);
+
+// Initial clock update
+updateClock();
+</script>
+</body>
+</html>
